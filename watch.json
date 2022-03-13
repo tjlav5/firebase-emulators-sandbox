@@ -7,7 +7,8 @@
   },
   "restart": {
     "include": [
-      "^backend/"
+      "^backend/",
+      "vite\\.config\\.js"
     ],
     "exclude": [
       "src/" 

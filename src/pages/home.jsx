@@ -56,7 +56,7 @@ export default function Home() {
     // connectFirestoreEmulator(firestoreInstance, 'clever-obtainable-snowflake.glitch.com', '443/proxy/firestore');
     firestoreInstance._setSettings({
     ...firestoreInstance._getSettings(),
-    host: `clever-obtainable-snowflake.glitch.me/proxy/firestore`,
+    host: `clever-obtainable-snowflake.glitch.me/emulators/firestore`,
     ssl: true
   });
 
@@ -88,7 +88,7 @@ export default function Home() {
       <FirestoreProvider sdk={firestoreInstance}>
         <Foo />
       <h1 className="title">Hello world!!</h1>
-      <a href="/foo/hub">Emulators</a>
+      <a href="/emulators/ui">Emulators</a>
       {/* When the user hovers over the image we apply the wiggle style to it */}
       <animated.div onMouseEnter={trigger} style={style}>
         <img
