@@ -70,11 +70,15 @@ app.all(
         if (!response) return response;
 
         const config = JSON.parse(response);
-        config.firestore.host = `${process.env.PROJECT_DOMAIN}.glitch.me`;
-        config.firestore.port = `80/proxy/firestore`;
-        firestoreWebSocketPort = config.firestore.webSocketPort;
-        config.firestore.webSocketHost = `${process.env.PROJECT_DOMAIN}.glitch.me`;
-        config.firestore.webSocketPort = `80/proxy/firestore-ws`;
+        // config.firestore.host = `${process.env.PROJECT_DOMAIN}.glitch.me`;
+        // config.firestore.port = `80/proxy/firestore`;
+        // firestoreWebSocketPort = config.firestore.webSocketPort;
+        // config.firestore.webSocketHost = `${process.env.PROJECT_DOMAIN}.glitch.me`;
+        // config.firestore.webSocketPort = `80/proxy/firestore-ws`;
+        
+        config.logging.ogPort = config.logging.port;
+        config.logging.host = `${process.env.PROJECT_DOMAIN}.glitch.me`;
+        config.logging.port = `80/proxy/logging`;
 
         return JSON.stringify(config);
         // console.log({ response });
@@ -89,6 +93,15 @@ app.all(
 );
 
 app.all(
+  "/proxy/functions/*",
+  createProxyMiddleware({
+    target: "http://127.0.0.1:4003",
+    changeOrigin: true,
+    pathRewrite: { "^/proxy/functions": "" },
+  })
+);
+
+app.all(
   "/proxy/firestore/*",
   createProxyMiddleware({
     target: "http://localhost:4001",
@@ -97,21 +110,31 @@ app.all(
   })
 );
 
-fetch("http://localhost:4001/ws/discovery")
-  .then((r) => r.json())
-  .then(({ url }) => {
-    console.log({ url });
-    const port = url.split(":")[1];
+app.all(
+  "/proxy/logging",
+  createProxyMiddleware({
+    target: "http://localhost:4500",
+    changeOrigin: true,
+    pathRewrite: { "^/proxy/firestore": "" },
+    ws: true,
+  })
+);
 
-    app.all(
-      "/proxy/firestore-ws/*",
-      createProxyMiddleware({
-        target: `http://localhost:${port}`,
-        changeOrigin: true,
-        pathRewrite: { "^/proxy/firestore-ws": "" },
-        ws: true,
-      })
-    );
+// fetch("http://localhost:4001/ws/discovery")
+//   .then((r) => r.json())
+//   .then(({ url }) => {
+//     console.log({ url });
+//     const port = url.split(":")[1];
+
+//     app.all(
+//       "/proxy/firestore-ws/*",
+//       createProxyMiddleware({
+//         target: `http://localhost:${port}`,
+//         changeOrigin: true,
+//         pathRewrite: { "^/proxy/firestore-ws": "" },
+//         ws: true,
+//       })
+//     );
 
     app.all(
       "*",
@@ -124,4 +147,4 @@ fetch("http://localhost:4001/ws/discovery")
     app.listen(process.env.PORT, () => {
       console.log(`Example app listening on port ${process.env.PORT}`);
     });
-  });
+  // });
