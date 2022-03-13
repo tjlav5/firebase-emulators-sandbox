@@ -30,6 +30,8 @@ export default defineConfig({
               const config = JSON.parse(body);
               config.firestore.host = 'clever-obtainable-snowflake.glitch.me';
               config.firestore.port = '80/emulators/firestore';
+              config.logging.host = 'clever-obtainable-snowflake.glitch.me';
+              config.logging.port = '80/emulators/logging';
               res.end(JSON.stringify(config));
             });
           });
@@ -68,6 +70,12 @@ export default defineConfig({
         target: "http://127.0.0.1:4001",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/emulators\/firestore/, ""),
+      },
+      "/emulators/logging": {
+        target: "http://127.0.0.1:4004",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/emulators\/logging/, ""),
+        ws: true,
       },
     },
   },

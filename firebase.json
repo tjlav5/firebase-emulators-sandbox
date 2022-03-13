@@ -9,6 +9,9 @@
     },
     "functions": {
       "port": 4003
+    },
+    "logging": {
+      "port": 4004
     }
   }
 }
