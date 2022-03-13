@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Router, Link } from "wouter";
+import {
+  FirebaseAppProvider,
+  FirestoreProvider,
+  useFirestoreDocData,
+  useFirestore,
+  useFirebaseApp,
+} from "reactfire";
+
+const firebaseConfig = {
+  /* Add in your config object from the Firebase console */
+  projectId: 'demo-app',
+};
 
 /**
 * This code defines the react app
@@ -24,6 +36,7 @@ import Seo from './components/seo.jsx';
 // Home function that is reflected across the site
 export default function Home() {
   return (
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
     <Router hook={useHashLocation}>
       <Seo />
       <main role="main" className="wrapper">
@@ -49,5 +62,6 @@ export default function Home() {
         </a>
       </footer>
     </Router>
+          </FirebaseAppProvider>
   );
 }
