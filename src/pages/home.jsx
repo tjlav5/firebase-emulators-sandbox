@@ -46,7 +46,8 @@ export default function Home() {
   };
   return (
     <>
-      <h1 className="title">Hello world!</h1>
+      <h1 className="title">Hello world!!</h1>
+      <a href="/foo/hub">Emulators</a>
       {/* When the user hovers over the image we apply the wiggle style to it */}
       <animated.div onMouseEnter={trigger} style={style}>
         <img
